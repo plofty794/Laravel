@@ -5,8 +5,6 @@ export default {
         "./resources/**/*.js",
         "./resources/**/*.vue",
     ],
-    theme: {
-        extend: {},
-    },
+    // your-project/vendor/mkocansey/bladewind/tailwind.config.js
     plugins: [],
 };

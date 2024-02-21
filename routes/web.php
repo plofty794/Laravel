@@ -42,3 +42,9 @@ Route::post('/logout', [UserController::class, "logout"]);
 Route::get('/edit-blog-post/{blogPostId}', [BlogPostController::class, "editBlogPostPage"]);
 Route::post('/create-blog-post', [BlogPostController::class, "createBlogPost"]);
 Route::patch('/edit-blog-post/{blogPostId}', [BlogPostController::class, "editBlogPost"]);
+Route::delete('/delete-blog-post/{blogPostId}', [BlogPostController::class, "deleteBlogPost"]);
+
+// Email Verification
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');

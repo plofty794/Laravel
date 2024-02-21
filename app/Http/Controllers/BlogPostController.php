@@ -50,4 +50,11 @@ class BlogPostController extends Controller
 
         return view("edit-blog-post", ["blogPost" => $blogPost, "successMessage" => "Blog post has been edited."]);
     }
+
+    public function deleteBlogPost(Request $request, $blogPostId) {
+        if (auth()->check()) {
+            BlogPost::where("id", $blogPostId)->delete();
+            return redirect("/");
+        }
+    }
 }

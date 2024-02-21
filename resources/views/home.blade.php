@@ -11,7 +11,7 @@
   <nav class="p-8 w-full">
     <ul class="flex justify-between items-center w-full">
       <li>
-        <h1 class="text-2xl font-bold">N*gga</h1>
+        <h1 class="text-2xl font-bold">{{ Auth::user()->name }}</h1>
       </li>
       <li><form action="/logout" method="post">
         @csrf
@@ -33,8 +33,11 @@
       <input autofocus id="title" type="text" name="title" class="text-sm font-medium w-full p-2 rounded-md border outline-1 outline">
       <label class="font-bold text-sm" for="content">Content</label>
       <textarea id="content" name="content" class="text-sm font-medium w-full p-2 rounded-md border outline-1 outline"></textarea>
-      <button class="font-bold text-sm border rounded-md px-4 py-2 bg-gray-950 text-white">
-       Create post
+      <button class="flex items-center justify-center gap-2 font-bold text-sm border rounded-md px-4 py-2 bg-gray-950 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+        </svg>
+        Create post
       </button>
        @if ($errors->any())
        <ul class="p-4 border border-red-600 bg-red-400 rounded-md w-max mx-auto">
