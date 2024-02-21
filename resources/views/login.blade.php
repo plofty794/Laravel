@@ -14,12 +14,16 @@
   <div class="flex items-center justify-center min-h-screen flex-col gap-4">
     <h1 class="text-3xl font-bold text-center text-white">Welcome N*gga</h1>
     @if ($errors->any())
-    <ul class="p-4 border border-red-600 bg-red-400 rounded-md w-max">
-        @foreach ($errors->all() as $error)
-            <li class="text-white font-semibold text-sm">{{ $error }}</li>
-        @endforeach
-    </ul>
-@endif
+      @foreach ($errors->all() as $error)
+        <div class="w-2/7">
+          <x-bladewind.alert
+          class="text-sm font-semibold"
+            type="error">
+            {{ $error }}
+          </x-bladewind.alert>  
+        </div>
+      @endforeach
+    @endif
     <x-bladewind.card class="w-2/6 p-6">
       <form class="flex flex-col gap-2 signup-form" action="/login" method="post">
         @csrf 
@@ -43,7 +47,6 @@
     }
 });
     const signUp = () => (validateForm('.signup-form'))// do this if not validated
-
   </script>
 </body>
 </html>
