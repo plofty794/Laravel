@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-
 class UserController extends Controller
 {
     public function getBlogPosts(Request $request) {
@@ -19,7 +18,6 @@ class UserController extends Controller
         }
         return redirect("/login");
     }
-
 
     public function login(Request $request) {
         $requestBody = $request->validate([
@@ -40,7 +38,6 @@ class UserController extends Controller
             "email" => ["required", "email", Rule::unique("users", "email"), new ValidateEmail],
             "password" => ["required", "min:8", "max:15"],
         ]);
-
         $requestBody['password'] = bcrypt($requestBody['password']);
         $user = User::create($requestBody);
         auth()->login($user);

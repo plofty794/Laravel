@@ -23,9 +23,15 @@ Route::get('/getting-started', function () {
 
 // User Controllers
 Route::get('/signup', function () {
+    if (auth()->check()) {
+        return redirect("/");
+    }
     return view('signup');
 });
 Route::get('/login', function () {
+    if (auth()->check()) {
+        return redirect("/");
+    }
     return view('login');
 });
 Route::post('/signup', [UserController::class, "signup"]);
@@ -33,7 +39,6 @@ Route::post('/login', [UserController::class, "login"]);
 Route::post('/logout', [UserController::class, "logout"]);
 
 // Blog Post Controllers
-
 Route::get('/edit-blog-post/{blogPostId}', [BlogPostController::class, "editBlogPostPage"]);
 Route::post('/create-blog-post', [BlogPostController::class, "createBlogPost"]);
 Route::patch('/edit-blog-post/{blogPostId}', [BlogPostController::class, "editBlogPost"]);
