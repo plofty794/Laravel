@@ -29,9 +29,9 @@
       <form class="flex flex-col gap-2 signup-form" action="/signup" method="post">
         @csrf 
         <x-bladewind.input error_message="You will need to enter your name" required="true" label="Name" autofocus autocomplete="off" type="text" name="name"  />
-        <x-bladewind.input error_message="You will need to enter your email" required="true" label="Email" autocomplete="off" name="email"  />
+        <x-bladewind.input error_message="You will need to enter your email" required="true" label="Email" autocomplete="off" name="email" />
         <x-bladewind.input error_message="You will need to enter your password" required="true" label="Password" type="password" suffix="eye" viewable="true" name="password"  />
-        <x-bladewind.button can_submit="true" size="small">Create account</x-bladewind.button>
+        <x-bladewind.button name="btn-save" has_spinner="true" can_submit="true" size="small">Create account</x-bladewind.button>
       </form>
     </x-bladewind.card>
     <div class="flex items-center justify-center gap-2">
@@ -42,13 +42,18 @@
   </div>
   <script>
     dom_el('.signup-form').addEventListener('submit',  (e) => {
-    e.preventDefault();
-    const res = signUp();
-    if (res == true) {
-      e.target.submit();
+      e.preventDefault();
+      signUp(e);
+    });
+
+    signUp = (e) => {
+      if (validateForm('.signup-form')) {
+        unhide('.btn-save .bw-spinner');
+        e.target.submit();
+      } else {
+        hide('.btn-save .bw-spinner')
+      }
     }
-});
-    const signUp = () => (validateForm('.signup-form'))// do this if not validated
   </script>
 </body>
 </html>

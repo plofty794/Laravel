@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-create > *,
+.btn-edit > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}

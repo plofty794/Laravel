@@ -8,6 +8,7 @@ use App\Rules\ValidateEmail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class UserController extends Controller
 {
@@ -40,6 +41,7 @@ class UserController extends Controller
         ]);
         $requestBody['password'] = bcrypt($requestBody['password']);
         $user = User::create($requestBody);
+        event(new Registered($user));
         auth()->login($user);
         return redirect('/');
     }
