@@ -15,7 +15,7 @@ class UserController extends Controller
     public function getBlogPosts(Request $request) {
         if (auth()->check()) {
             $blogPosts = auth()->user()->currentUserBlogPosts()->latest()->get();
-            return view("home", ["blogPosts" => $blogPosts->count() > 0 ? $blogPosts : null]);
+            return view("home", ["blogPosts" => $blogPosts->count() > 0 ? $blogPosts : null, "status" => null]);
         }
         return redirect("/login");
     }

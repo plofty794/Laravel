@@ -40,7 +40,7 @@
           <x-bladewind.dropmenu-item>
             <form class="w-full" action="/logout" method="post">
               @csrf
-              <x-bladewind.button class="w-full" can_submit="true" type="secondary" size="tiny" >Log out</x-bladewind.button>
+              <x-bladewind.button class="w-full" can_submit="true" size="tiny" color="red" >Log out</x-bladewind.button>
             </form>
           </x-bladewind.dropmenu-item>
         </x-bladewind.dropmenu>
@@ -59,8 +59,24 @@
         </div>
       @endforeach
     @endif
+    @if (session('created'))
+      <div class="w-1/4 mx-auto">
+        <x-bladewind.alert
+          type="success">
+          {{ session('created') }}
+        </x-bladewind.alert>
+      </div>
+    @endif
+    @if (session('deleted'))
+      <div class="w-1/4 mx-auto">
+        <x-bladewind.alert
+          type="success">
+          {{ session('deleted') }}
+        </x-bladewind.alert>
+      </div>
+    @endif
     <x-bladewind.card title="Create post" class="p-4 w-2/4">
-      <form action="/create-blog-post" method="post" class="flex flex-col gap-2 signup-form">
+      <form action="/create-blog-post" method="post" class="flex flex-col gap-2 create-post">
         @csrf
         <x-bladewind.input error_message="Title is required" label="Title" autofocus id="title" type="text" name="title" required="true" />
         <x-bladewind.textarea error_message="Content is required" required="true" label="Content" id="content" name="content" />
@@ -93,20 +109,55 @@
         </div>
       @else
         <x-bladewind.empty-state
-          message="Awesome! You have no blog posts to yet.">
+          message="Awesome! You have no blog posts yet.">
         </x-bladewind.empty-state>
       @endif
     </x-bladewind.card>
+
+    <x-bladewind.modal
+    name="delete-paymentz"
+    show_action_buttons="false">
+
+      <x-bladewind.processing
+        name="processing-delete"
+        message="Deleting pending payment"
+        hide="false" />
+
+      <x-bladewind.process-complete
+        name="delete-payment-yes"
+        process_completed_as="passed"
+        button_label="Done"
+        button_action="hideModal('delete-paymentz')"
+        message="Pending payment was deleted successfully" />
+    </x-bladewind.modal>
+
   </div>
   <script>
-    dom_el('.signup-form').addEventListener('submit',  (e) => {
+    dom_el('.create-post').addEventListener('submit',  (e) => {
       e.preventDefault();
-      signUp(e);
+      createPost(e);
     });
 
-    signUp = (e) => {
-      if (validateForm('.signup-form')) {
+    createSuccess = () => {
+      hideHideables();
+      showModal('delete-paymentz');
+      unhide('.processing-delete');
+
+      setTimeout( function() {
+          hideHideables();
+          unhide('.delete-payment-yes')
+      }, 500);
+    }
+
+    hideHideables = () => {
+        hide('.processing-delete');
+        hide('.delete-payment-yes');
+    }
+
+    createPost = (e) => {
+      if (validateForm('.create-post')) {
         unhide('.btn-create .bw-spinner');
+        setTimeout(() => createSuccess(), 800);
         e.target.submit();
       } else {
         hide('.btn-save .bw-spinner')

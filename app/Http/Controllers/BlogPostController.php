@@ -29,13 +29,13 @@ class BlogPostController extends Controller
 
         BlogPost::create($requestBody);
 
-        return redirect("/");
+        return back()->with('created', 'New blog post created!');
     }
 
     public function editBlogPost(Request $request, $blogPostId) {
         $requestBody = $request->validate([
-            "title" => ["required", "min:8", "max:20", Rule::unique("blog_posts", "title")],
-            "content" => ["required", "min:10", "max:100"]
+            "title" => ["required", "min:8", "max:50", Rule::unique("blog_posts", "title")],
+            "content" => ["required", "min:10", "max:500"]
         ]);
 
         $requestBody['title'] = strip_tags($requestBody['title']);
@@ -54,7 +54,8 @@ class BlogPostController extends Controller
     public function deleteBlogPost(Request $request, $blogPostId) {
         if (auth()->check()) {
             BlogPost::where("id", $blogPostId)->delete();
-            return redirect("/");
+            
+            return redirect("/")->with('deleted', 'Blog post has been deleted!');
         }
     }
 }

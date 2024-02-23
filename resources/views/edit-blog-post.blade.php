@@ -13,6 +13,17 @@
 <body class="bg-[#121A2D]">
   <div class="p-6">
     <x-bladewind.button tag="a" href="/" size="small" >Go back</x-bladewind.button>
+    @if ($errors->any())
+      @foreach ($errors->all() as $error)
+        <div class="w-1/4 mx-auto">
+          <x-bladewind.alert
+          class="text-sm font-semibold"
+            type="error">
+            {{ $error }}
+          </x-bladewind.alert>  
+        </div>
+      @endforeach
+    @endif
     <x-bladewind.card class="w-2/4 m-8 mx-auto" title="Edit {{ $blogPost->title }}">
         <div class="flex flex-col gap-2 w-full">
           <form class="flex flex-col gap-2" action="/edit-blog-post/{{ $blogPost->id }}" method="POST">
@@ -37,13 +48,6 @@
               Delete
             </x-bladewind.button>
           </form>
-          @if ($errors->any())
-          <ul class="p-4 border border-red-600 bg-red-400 rounded-md w-max mx-auto">
-              @foreach ($errors->all() as $error) 
-                  <li class="text-white font-semibold text-sm">{{ $error }}</li>
-              @endforeach
-          </ul>
-          @endif
           <p class="text-green-600 font-bold text-sm">{{ $successMessage ?? "" }}</p>
         </div>
       </div>
