@@ -9,3 +9,22 @@
     align-items: center;
     gap: 5px;
 }
+
+.bw-edit-profile > * {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.bw-edit-profile > *::-webkit-scrollbar {
+    width: 8px;
+}
+
+.bw-edit-profile > *::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.bw-edit-profile > *::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    border-radius: 5px;
+}

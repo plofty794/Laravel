@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -44,6 +45,28 @@ class UserController extends Controller
         event(new Registered($user));
         auth()->login($user);
         return redirect('/');
+    }
+
+    public function updateUserProfile(Request $request) {
+        $requestBody = $request->validate([
+            "name" => ["required", "min:6", "max:15", Rule::unique("users", "name")],
+            "email" => ["required", "email", Rule::unique("users", "email"), new ValidateEmail],
+        ]);
+
+        
+        if ($request->file('avatar')) {
+            $avatar = Storage::disk('public')->put("/", $request->file('avatar'));
+            auth()->user()->name = $requestBody["name"];
+            auth()->user()->email = $requestBody["email"];
+            auth()->user()->avatar = $avatar;
+            auth()->user()->save();
+        }
+
+        auth()->user()->name = $requestBody["name"];
+        auth()->user()->email = $requestBody["email"];
+        auth()->user()->save();
+
+        return back()->with("success", "Profile has been updated");
     }
 
     public function logout() {

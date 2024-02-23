@@ -38,6 +38,7 @@ Route::get('/login', function () {
 Route::post('/signup', [UserController::class, "signup"]);
 Route::post('/login', [UserController::class, "login"]);
 Route::post('/logout', [UserController::class, "logout"]);
+Route::patch('/update-user-profile/{userId}', [UserController::class, "updateUserProfile"]);
 
 // Blog Post Controllers
 Route::get('/edit-blog-post/{blogPostId}', [BlogPostController::class, "editBlogPostPage"]);

@@ -19,18 +19,33 @@
     close_after_action="false"
     >
     <h1 class="mb-4">Edit Your Profile</h1>
-    <form method="post" action="" class="profile-form">
+    @if (Auth::user()->avatar)
+      <div class="w-max mx-auto mb-4">
+        <x-bladewind.avatar size="omg" image="{{ Storage::url(Auth::user()->avatar) }}" />
+      </div>
+    @else
+      <div class="w-max mx-auto mb-4">
+        <x-bladewind.avatar size="huge" image="{{ asset('vendor/bladewind/images/avatar.png') }}" />
+      </div>
+    @endif
+    <form method="post" action="/update-user-profile/{{ Auth::user()->id }}" class="profile-form" enctype="multipart/form-data">
       @csrf
+      {{ method_field('PATCH') }}
       <x-bladewind.input value="{{ Auth::user()->name }}" required="true" name="name"
-      error_message="Please enter your name" label="Name" />
+        error_message="Please enter your name" label="Name" />
       <x-bladewind.input value="{{ Auth::user()->email }}" required="true" name="email"
-           error_message="Please enter your email" label="Email address" />
+        error_message="Please enter your email" label="Email address" />
+      <x-bladewind.filepicker class="w-full h-52" max_file_size="1" name="avatar" placeholder="Upload your avatar" accepted_file_types="image/*" />
     </form>
   </x-bladewind.modal>
-  <nav class="p-8 w-full">
+  <nav class="px-8 py-4 w-full bg-[#0F172A] border-b border-slate-800">
     <ul class="flex justify-between items-center w-full">
       <li>
-        <h1 class="text-2xl font-medium text-white">{{ Auth::user()->name }}</h1>
+        @if (Auth::user()->avatar)
+          <x-bladewind.avatar size="small" image="{{ Storage::url(Auth::user()->avatar) }}" />
+        @else
+          <x-bladewind.avatar size="small" image="{{ asset('vendor/bladewind/images/avatar.png') }}" />
+        @endif
       </li>
       <li>
         <x-bladewind.dropmenu>
@@ -58,6 +73,14 @@
           </x-bladewind.alert>  
         </div>
       @endforeach
+    @endif
+    @if (session('success'))
+      <div class="w-1/4 mx-auto">
+        <x-bladewind.alert
+          type="success">
+          {{ session('success') }}
+        </x-bladewind.alert>
+      </div>
     @endif
     @if (session('created'))
       <div class="w-1/4 mx-auto">
@@ -115,20 +138,14 @@
     </x-bladewind.card>
 
     <x-bladewind.modal
-    name="delete-paymentz"
+    name="create-postz"
     show_action_buttons="false">
 
       <x-bladewind.processing
-        name="processing-delete"
-        message="Deleting pending payment"
+        name="processing-create"
+        message="Loading..."
         hide="false" />
 
-      <x-bladewind.process-complete
-        name="delete-payment-yes"
-        process_completed_as="passed"
-        button_label="Done"
-        button_action="hideModal('delete-paymentz')"
-        message="Pending payment was deleted successfully" />
     </x-bladewind.modal>
 
   </div>
@@ -139,25 +156,15 @@
     });
 
     createSuccess = () => {
-      hideHideables();
-      showModal('delete-paymentz');
-      unhide('.processing-delete');
-
-      setTimeout( function() {
-          hideHideables();
-          unhide('.delete-payment-yes')
-      }, 500);
-    }
-
-    hideHideables = () => {
-        hide('.processing-delete');
-        hide('.delete-payment-yes');
+      hide('.processing-create');
+      showModal('create-postz');
+      unhide('.processing-create');
     }
 
     createPost = (e) => {
       if (validateForm('.create-post')) {
         unhide('.btn-create .bw-spinner');
-        setTimeout(() => createSuccess(), 800);
+        createSuccess();
         e.target.submit();
       } else {
         hide('.btn-save .bw-spinner')
@@ -166,8 +173,7 @@
 
     saveProfile = () => {
       if(validateForm('.profile-form')){
-          // domEl('.profile-form').submit();
-          console.log("HEY")
+          domEl('.profile-form').submit();
       } else {
           return false;
       }
